@@ -260,13 +260,14 @@ class _SignupScreenState extends State<SignupScreen> {
                                   child: const Padding(
                                     padding: EdgeInsets.symmetric(
                                       vertical: 17,
-                                      horizontal: 134,
+                                      horizontal: 130,
                                     ),
                                     child: Text(
                                       "Register",
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 20,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
