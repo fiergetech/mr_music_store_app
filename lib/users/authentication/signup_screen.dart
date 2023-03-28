@@ -2,17 +2,20 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mr_music_store_app/users/authentication/signup_screen.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+import 'login_screen.dart';
+
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignupScreenState extends State<SignupScreen> {
   var formKey = GlobalKey<FormState>();
+  var nameController = TextEditingController();
+
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
   var isObsecure = true.obs;
@@ -29,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  //signup screen header
+                  //login screen header
                   SizedBox(
                     height: 100,
                   ),
@@ -37,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: MediaQuery.of(context).size.width,
                     height: 285,
                     child: Image.asset(
-                      "images/login_vector.png",
+                      "images/antriin_logo.png",
                     ),
                   ),
                   Container(
@@ -47,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Hai Selamat Datang Kembali!",
+                          "Yuk, buat akun AntriIn",
                           style: TextStyle(
                             color: Colors.black54,
                             fontSize: 22,
@@ -82,6 +85,52 @@ class _LoginScreenState extends State<LoginScreen> {
                           key: formKey,
                           child: Column(
                             children: [
+                              //nama
+                              TextFormField(
+                                controller: nameController,
+                                validator: (val) =>
+                                    val == "" ? "Mohon masukkan nama" : null,
+                                decoration: InputDecoration(
+                                  prefixIcon: const Icon(
+                                    Icons.person,
+                                    color: Colors.black26,
+                                  ),
+                                  hintText: "Nama",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                    borderSide: const BorderSide(
+                                      color: Colors.white60,
+                                    ),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                    borderSide: const BorderSide(
+                                      color: Colors.white60,
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                    borderSide: const BorderSide(
+                                      color: Colors.white60,
+                                    ),
+                                  ),
+                                  disabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                    borderSide: const BorderSide(
+                                      color: Colors.white60,
+                                    ),
+                                  ),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                    vertical: 6,
+                                  ),
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 18,
+                              ),
                               //email
                               TextFormField(
                                 controller: emailController,
@@ -192,12 +241,12 @@ class _LoginScreenState extends State<LoginScreen> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Text("Belum punya akun?"),
+                                  const Text("Sudah punya akun?"),
                                   TextButton(
                                     onPressed: () {
-                                      Get.to(SignupScreen());
+                                      Get.to(LoginScreen());
                                     },
-                                    child: const Text("Register disini"),
+                                    child: const Text("Login disini"),
                                   ),
                                 ],
                               ),
@@ -211,10 +260,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                   child: const Padding(
                                     padding: EdgeInsets.symmetric(
                                       vertical: 17,
-                                      horizontal: 144,
+                                      horizontal: 134,
                                     ),
                                     child: Text(
-                                      "Login",
+                                      "Register",
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 20,
@@ -226,16 +275,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ],
                             //email, password, login button
                           ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text("Apakah kamu admin?"),
-                            TextButton(
-                              onPressed: () {},
-                              child: const Text("Login disini"),
-                            ),
-                          ],
                         ),
                       ],
                     ),
