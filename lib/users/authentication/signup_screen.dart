@@ -1,9 +1,15 @@
+import 'dart:convert';
+import 'dart:developer';
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:mr_music_store_app/api_connection/api_connection.dart';
+import 'package:mr_music_store_app/users/model/user.dart';
 
 import 'login_screen.dart';
+import 'package:http/http.dart' as http;
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -18,7 +24,63 @@ class _SignupScreenState extends State<SignupScreen> {
 
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
+  var balanceController = TextEditingController();
+  var coinController = TextEditingController();
   var isObsecure = true.obs;
+  validateUserEmail() async {
+    try {
+      var res = await http.post(
+        Uri.parse(API.validateEmail),
+        body: {
+          'user_email': emailController.text.trim(),
+        },
+      );
+      if (res.statusCode == 200) {
+        var resBodyOfValidateEmail = jsonDecode(res.body);
+        if (resBodyOfValidateEmail['emailFound'] == true) {
+          Fluttertoast.showToast(
+              msg: "Email ini sudah digunakan, silahkan pakai email yang lain");
+        } else {
+          //register dan save user record
+          registerAndSaveUserRecord();
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+      Fluttertoast.showToast(msg: e.toString());
+    }
+  }
+
+  registerAndSaveUserRecord() async {
+    User userModel = User(
+      1,
+      nameController.text.trim(),
+      emailController.text.trim(),
+      passwordController.text.trim(),
+      balanceController.text.trim(),
+      coinController.text.trim(),
+    );
+    try {
+      var res = await http.post(
+        Uri.parse(API.signUp),
+        body: userModel.toJson(),
+      );
+      if (res.statusCode == 200) //dari flutter connection api ke server sukses
+      {
+        var resBodyOfSignup = jsonDecode(res.body);
+        if (resBodyOfSignup['success'] == true) {
+          Fluttertoast.showToast(msg: "Registrasi berhasil");
+        } else {
+          Fluttertoast.showToast(
+              msg: "Terjadi error , silahkan ulangi kembali");
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+      Fluttertoast.showToast(msg: e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -255,7 +317,12 @@ class _SignupScreenState extends State<SignupScreen> {
                                 color: Color.fromRGBO(59, 89, 167, 1),
                                 borderRadius: BorderRadius.circular(30),
                                 child: InkWell(
-                                  onTap: () {},
+                                  onTap: () {
+                                    if (formKey.currentState!.validate()) {
+                                      //validate email
+                                      validateUserEmail();
+                                    }
+                                  },
                                   borderRadius: BorderRadius.circular(30),
                                   child: const Padding(
                                     padding: EdgeInsets.symmetric(
