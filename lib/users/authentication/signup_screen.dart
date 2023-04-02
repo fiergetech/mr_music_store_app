@@ -57,14 +57,15 @@ class _SignupScreenState extends State<SignupScreen> {
       nameController.text.trim(),
       emailController.text.trim(),
       passwordController.text.trim(),
-      balanceController.text.trim(),
-      coinController.text.trim(),
+      /*balanceController.text.trim(),
+      coinController.text.trim(),*/
     );
     try {
       var res = await http.post(
         Uri.parse(API.signUp),
         body: userModel.toJson(),
       );
+
       if (res.statusCode == 200) //dari flutter connection api ke server sukses
       {
         var resBodyOfSignup = jsonDecode(res.body);
