@@ -39,7 +39,8 @@ class _SignupScreenState extends State<SignupScreen> {
         var resBodyOfValidateEmail = jsonDecode(res.body);
         if (resBodyOfValidateEmail['emailFound'] == true) {
           Fluttertoast.showToast(
-              msg: "Email ini sudah digunakan, silahkan pakai email yang lain");
+              msg:
+                  "Email ini sudah digunakan, silahkan gunakan email yang lain");
         } else {
           //register dan save user record
           registerAndSaveUserRecord();
@@ -57,8 +58,8 @@ class _SignupScreenState extends State<SignupScreen> {
       nameController.text.trim(),
       emailController.text.trim(),
       passwordController.text.trim(),
-      /*balanceController.text.trim(),
-      coinController.text.trim(),*/
+      balanceController.text.trim(),
+      coinController.text.trim(),
     );
     try {
       var res = await http.post(
@@ -71,9 +72,14 @@ class _SignupScreenState extends State<SignupScreen> {
         var resBodyOfSignup = jsonDecode(res.body);
         if (resBodyOfSignup['success'] == true) {
           Fluttertoast.showToast(msg: "Registrasi berhasil");
+          setState(() {
+            nameController.clear();
+            emailController.clear();
+            passwordController.clear();
+          });
         } else {
           Fluttertoast.showToast(
-              msg: "Terjadi error , silahkan ulangi kembali");
+              msg: "Terjadi kesalahan , silahkan registrasi kembali");
         }
       }
     } catch (e) {
