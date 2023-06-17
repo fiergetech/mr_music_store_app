@@ -1,8 +1,16 @@
+import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:mr_music_store_app/users/authentication/signup_screen.dart';
+import 'package:http/http.dart' as http;
+import 'package:mr_music_store_app/users/fragments/dashboard_of_fragments.dart';
+import 'package:mr_music_store_app/users/model/user.dart';
+import 'package:mr_music_store_app/users/userPreferences/user_preferences.dart';
+
+import '../../api_connection/api_connection.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,6 +24,39 @@ class _LoginScreenState extends State<LoginScreen> {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
   var isObsecure = true.obs;
+
+  loginUserNow() async {
+    try {
+      var res = await http.post(
+        Uri.parse(API.login),
+        body: {
+          "user_email": emailController.text.trim(),
+          "user_password": passwordController.text.trim(),
+        },
+      );
+
+      if (res.statusCode == 200) //dari flutter connection api ke server sukses
+      {
+        var resBodyOfLogin = jsonDecode(res.body);
+        if (resBodyOfLogin['success'] == true) {
+          Fluttertoast.showToast(
+              msg: "Login berhasil, selamat datang kembali!");
+
+          User userInfo = User.fromJson(resBodyOfLogin["user_data"]);
+
+          await RememberUserPrefs.saveRememberUser(userInfo);
+
+          Future.delayed(Duration(milliseconds: 2000), () {});
+        } else {
+          Fluttertoast.showToast(
+              msg: "Terjadi kesalahan , silahkan login kembali");
+        }
+      }
+    } catch (errorMsg) {
+      print("Error ::" + errorMsg.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -206,7 +247,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                 color: Color.fromRGBO(59, 89, 167, 1),
                                 borderRadius: BorderRadius.circular(30),
                                 child: InkWell(
-                                  onTap: () {},
+                                  onTap: () {
+                                    if (formKey.currentState!.validate()) {
+                                      loginUserNow();
+                                    }
+                                  },
                                   borderRadius: BorderRadius.circular(30),
                                   child: const Padding(
                                     padding: EdgeInsets.symmetric(

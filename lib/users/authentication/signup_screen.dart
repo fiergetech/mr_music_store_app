@@ -21,11 +21,10 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   var formKey = GlobalKey<FormState>();
   var nameController = TextEditingController();
-
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
-  var balanceController = TextEditingController();
-  var coinController = TextEditingController();
+  //var balanceController = TextEditingController();
+  //var coinController = TextEditingController();
   var isObsecure = true.obs;
   validateUserEmail() async {
     try {
@@ -58,8 +57,8 @@ class _SignupScreenState extends State<SignupScreen> {
       nameController.text.trim(),
       emailController.text.trim(),
       passwordController.text.trim(),
-      balanceController.text.trim(),
-      coinController.text.trim(),
+      //balanceController.text.trim(),
+      //coinController.text.trim(),
     );
     try {
       var res = await http.post(
@@ -328,6 +327,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                     if (formKey.currentState!.validate()) {
                                       //validate email
                                       validateUserEmail();
+                                      //registerAndSaveUserRecord();
                                     }
                                   },
                                   borderRadius: BorderRadius.circular(30),
