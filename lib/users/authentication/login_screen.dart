@@ -42,11 +42,11 @@ class _LoginScreenState extends State<LoginScreen> {
           Fluttertoast.showToast(
               msg: "Login berhasil, selamat datang kembali!");
 
-          User userInfo = User.fromJson(resBodyOfLogin["user_data"]);
+          User userInfo = User.fromJson(resBodyOfLogin["userData"]);
 
           await RememberUserPrefs.saveRememberUser(userInfo);
 
-          Future.delayed(Duration(milliseconds: 2000), () {});
+          Get.to(() => DashboardOfFragments());
         } else {
           Fluttertoast.showToast(
               msg: "Terjadi kesalahan , silahkan login kembali");
