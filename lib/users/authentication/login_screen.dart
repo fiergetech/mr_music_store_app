@@ -44,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
           User userInfo = User.fromJson(resBodyOfLogin["userData"]);
 
-          await RememberUserPrefs.saveRememberUser(userInfo);
+          await RememberUserPrefs.storeUserInfo(userInfo);
 
           Get.to(() => DashboardOfFragments());
         } else {
